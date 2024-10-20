@@ -1,0 +1,37 @@
+version: '1'
+
+services:
+  client:
+    build: ./client
+    container_name: react-ui
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - server
+    networks:
+      - mern-curd
+
+  server:
+    build: ./server
+    container_name: node-api
+    restart: always
+    ports:
+      - "2000:2000"
+    depends_on:
+      - database
+    networks:
+      - mern-curd
+
+  database:
+    image: mongo
+    container_name: mongo-db
+    ports:
+      - "27018:27018"
+    networks:
+      - mern-curd
+   
+networks:
+  mern-curd:
+    driver: bridge
